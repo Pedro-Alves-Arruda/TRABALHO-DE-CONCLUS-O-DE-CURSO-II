@@ -43,7 +43,7 @@ return [
         ],
 
         'web' => [
-            'driver' => 'sessions',
+            'driver' => 'session',
             'provider' => 'users',
         ]
     ],

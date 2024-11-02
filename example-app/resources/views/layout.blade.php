@@ -29,7 +29,7 @@
     <body>
         <header class="header" @yield('Header')>
             <img src=" {{ asset('Images/logo1.jpg') }} ">
-            <a class="a" href="{{ url('/welcome') }}" ><img src=" {{ asset('Images/home.png') }} "></a>
+            <a class="a" href="{{ route('welcome') }}" ><img src=" {{ asset('Images/home.png') }} "></a>
             <h3 class="title" style="margin-left:28rem">@yield('titulo')</h3>
         </header>
 

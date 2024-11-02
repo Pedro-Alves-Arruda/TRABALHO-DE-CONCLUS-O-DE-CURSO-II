@@ -2,13 +2,11 @@
 
 namespace App\Http\Middleware;
 
-use App\Http\Middleware\Authenticate as Middleware;
 use Illuminate\Http\Request;
 use Closure;
 use Symfony\Component\HttpFoundation\Response;
-use Tymon\JWTAuth\Facades\JWTAuth;
-use Tymon\JWTAuth\Exceptions\JWTException;
-use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Middleware\Authenticate as Middleware;
 
 
 class Authenticate extends Middleware
@@ -18,7 +16,9 @@ class Authenticate extends Middleware
      */
     protected function redirectTo(Request $request): ?string
     {
-        return $request->expectsJson() ? null : route('login');
+        if (! $request->expectsJson()) {
+            return route('loginGet');
+        }
     }
 
     /**
@@ -26,19 +26,18 @@ class Authenticate extends Middleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle($request, Closure $next) : Response
+    public function handle($request, Closure $next, ...$guards) : Response
     {
-        try {
-            // Check if the user is authenticated
-            if (! $user = JWTAuth::parseToken()->authenticate()) {
-                return response()->json(['message' => 'User not found'], 404);
-            }
-        } catch (TokenExpiredException $e) {
-            return response()->json(['message' => 'Token expired'], 401);
-        } catch (JWTException $e) {
-            return response()->json(['message' => 'Token invalid'], 401);
-        }
+        //Se passar daqui é porque esta autenticado
+        session_start();
 
-        return $next($request);
+       if(asset($_SESSION['email']))
+       {
+           return $next($request);
+
+       }else{
+            return redirect()->route('loginGet');
+       }
+
     }
 }

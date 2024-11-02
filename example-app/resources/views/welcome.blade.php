@@ -20,7 +20,6 @@
 
     @section('Header')
         @section('titulo')
-            Bem vindo {{ $_SESSION["nome"] }}
         @endsection
     @endsection
     

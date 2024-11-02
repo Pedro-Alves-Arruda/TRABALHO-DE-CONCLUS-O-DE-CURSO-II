@@ -70,7 +70,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'America/Sao_Paulo',
 
     /*
     |--------------------------------------------------------------------------
@@ -83,7 +83,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'pt-BR',
 
     /*
     |--------------------------------------------------------------------------
@@ -109,7 +109,7 @@ return [
     |
     */
 
-    'faker_locale' => 'en_US',
+    'faker_locale' => 'pt-BR',
 
     /*
     |--------------------------------------------------------------------------
@@ -169,7 +169,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
-        Tymon\JWTAuth\Providers\LaravelServiceProvider::class
+        Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
+        Illuminate\Session\SessionServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -185,6 +186,8 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
+        'Auth' => Illuminate\Support\Facades\Auth::class,
+        'Session' => Illuminate\Support\Facades\Session::class,
     ])->toArray(),
 
 ];

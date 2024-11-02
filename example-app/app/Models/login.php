@@ -2,41 +2,46 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\Usuario;
 use Exception;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Providers\RouteServiceProvider;
 
 class login extends Model
 {
     use HasFactory;
+
     protected $connection = "mysql";
     protected $table = "usuarios";
 
+     /**
+     * Where to redirect users after login.
+     *
+     * @var string
+     */
+    protected $redirectTo = RouteServiceProvider::HOME;
+
 
     function login(Request $request){
-        
-        $usuario = DB::table('usuarios')
-        ->where('usuarios.email', "=", $request->input('email'))
-        ->where('usuarios.senha', "=", $request->input('senha'))
-        ->select('usuarios.*')
-        ->first();
 
-        if(isset($usuario->Email) && isset($usuario->Email) != ''){
-        
+        $usuario = User::where('email', $request->email)->first();  
+
+        if(!$usuario)
+        {
+            return redirect()->route('loginGet');
+        }else if (auth()->attempt(['email' => $request->email, 'password' => $request->senha])) {
+
             session_start();
 
-            $_SESSION['usuario'] =  $usuario->Email;
-            $_SESSION['senha'] = $usuario->Senha;
-            $_SESSION['nome'] = $usuario->nome;
-
-            return view('welcome', ['user'=> $_SESSION['nome']]);
-
-        }else{
-            return redirect()->route('loginGet');
+            $_SESSION['email'] = $request->email;   
+            $_SESSION['name'] = $request->name;
+             
+            return redirect()->intended($this->redirectTo);
         }
-
     }
 }
